@@ -28,6 +28,28 @@
           }]
         }
       })
+      .when('/routes', {
+        templateUrl: 'html/routes/index.html',
+        controller: 'RoutesController'
+      })
+      .when('/routes/add', {
+        templateUrl: 'html/routes/form.html',
+        controller: 'RouteController',
+        resolve: {
+          services: ['Kong', '$location', function(Kong) {
+            return Kong.get('/services');
+          }],
+        }
+      })
+      .when('/routes/:id', {
+        templateUrl: 'html/routes/form.html',
+        controller: 'RouteController',
+        resolve: {
+          services: ['Kong', '$location', function(Kong) {
+            return Kong.get('/services');
+          }]
+        }
+      })
       .when('/apis', {
         templateUrl: 'html/apis/index.html',
         controller: 'ApisController'

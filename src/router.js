@@ -7,6 +7,49 @@
         templateUrl: 'html/home.html',
         controller: 'HomeController'
       })
+      .when('/services', {
+        templateUrl: 'html/services/index.html',
+        controller: 'ServicesController'
+      })
+      .when('/services/add', {
+        templateUrl: 'html/services/form.html',
+        controller: 'ServiceController',
+        resolve: {
+          service: function() {return {}}
+        }
+      })
+      .when('/services/:id', {
+        templateUrl: 'html/services/form.html',
+        controller: 'ServiceController',
+        resolve: {
+          service: ['Kong', '$route', function (Kong, $route) {
+            var id = $route.current.params.id;
+            return Kong.get('/services/' + id)
+          }]
+        }
+      })
+      .when('/routes', {
+        templateUrl: 'html/routes/index.html',
+        controller: 'RoutesController'
+      })
+      .when('/routes/add', {
+        templateUrl: 'html/routes/form.html',
+        controller: 'RouteController',
+        resolve: {
+          services: ['Kong', '$location', function(Kong) {
+            return Kong.get('/services');
+          }],
+        }
+      })
+      .when('/routes/:id', {
+        templateUrl: 'html/routes/form.html',
+        controller: 'RouteController',
+        resolve: {
+          services: ['Kong', '$location', function(Kong) {
+            return Kong.get('/services');
+          }]
+        }
+      })
       .when('/apis', {
         templateUrl: 'html/apis/index.html',
         controller: 'ApisController'
@@ -70,7 +113,13 @@
           }],
           consumers: ['Kong', '$location', function(Kong) {
             return Kong.get('/consumers?size=1000');
-          }]
+          }],
+          routes: ['Kong', function(Kong) {
+            return Kong.get('/routes');
+          }],
+          services: function() {return null;}// ['Kong', function(Kong) {
+            //return Kong.get('/services');
+          //}]
         }
       })
       .when('/plugins/:id', {

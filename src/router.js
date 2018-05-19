@@ -113,7 +113,13 @@
           }],
           consumers: ['Kong', '$location', function(Kong) {
             return Kong.get('/consumers?size=1000');
-          }]
+          }],
+          routes: ['Kong', function(Kong) {
+            return Kong.get('/routes');
+          }],
+          services: function() {return null;}// ['Kong', function(Kong) {
+            //return Kong.get('/services');
+          //}]
         }
       })
       .when('/plugins/:id', {

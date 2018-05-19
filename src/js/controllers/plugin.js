@@ -1,4 +1,4 @@
-angular.module('app').controller("PluginController", ["$scope", "Kong", "$location", "$routeParams", "plugins", "apis", "consumers", "plugin", "Alert", "$route", function ($scope, Kong, $location, $routeParams, plugins, apis, consumers, plugin, Alert, $route)
+angular.module('app').controller("PluginController", ["$scope", "Kong", "$location", "$routeParams", "plugins", "apis", "consumers", "routes", "services", "plugin", "Alert", "$route", function ($scope, Kong, $location, $routeParams, plugins, apis, consumers, routes, services, plugin, Alert, $route)
 {
     var mode;
     if (plugin) {
@@ -11,6 +11,12 @@ angular.module('app').controller("PluginController", ["$scope", "Kong", "$locati
         mode = 'create';
     }
 
+    //$scope.services = services;
+    $scope.routes = routes;
+    Kong.get('/services').then( function(data) {
+        $scope.services = data;
+    });
+    
     var enabledPlugins = Array.isArray(plugins.enabled_plugins) ?
       plugins.enabled_plugins :
       Object.keys(plugins.enabled_plugins); // Happens with kong 0.9.0. See issue #52
